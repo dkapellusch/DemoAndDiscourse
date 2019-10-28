@@ -1,0 +1,26 @@
+version: '2'
+services:
+  DDZookeeper:
+    image: "confluentinc/cp-zookeeper:latest"
+    ports:
+      - "32181:32181"
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 32181
+    restart: always
+    networks:
+      - "dd-net"
+  DDKafka:
+    image: "confluentinc/cp-kafka:latest"
+    ports:
+      - "39092:39092"
+    environment:
+      KAFKA_ZOOKEEPER_CONNECT: "DDZookeeper:32181"
+      KAFKA_ADVERTISED_LISTENERS: "PLAINTEXT://DDKafka:39093,PLAINTEXT_HOST://localhost:39092"
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: "PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT"
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_BROKER_ID: 1
+    networks:
+      - "dd-net"
+networks:
+  dd-net:

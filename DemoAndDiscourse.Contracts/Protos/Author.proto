@@ -1,0 +1,30 @@
+syntax = "proto3";
+option csharp_namespace = "DemoAndDiscourse.Contracts";
+package Author;
+
+import "google/protobuf/timestamp.proto";
+import "Empty.proto";
+
+message Author {
+    string FirstName = 1;
+    string LastName = 2;
+    google.protobuf.Timestamp Birthday = 3;
+}
+
+message AuthorRequest {
+    string FullName = 1;
+}
+
+service AuthorService {
+    rpc AddAuthor (Author) returns (Author) {
+    }
+
+    rpc GetAuthorStream (Empty) returns (stream Author) {
+    }
+
+    rpc BiDirectionalAuthorStream (stream Author) returns (stream Author) {
+    }
+
+    rpc GetAuthor (AuthorRequest) returns (Author) {
+    }
+}

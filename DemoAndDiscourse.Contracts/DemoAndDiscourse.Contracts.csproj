@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netcoreapp3.0</TargetFramework>
+        <RootNamespace>DemoAndDiscourse.Contracts</RootNamespace>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <Protobuf Include="Protos\*.proto" ProtoRoot="Protos" GrpcServices="Both" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Costura.Fody" Version="4.1.0" />
+        <PackageReference Include="Google.Protobuf" Version="3.10.0" />
+        <PackageReference Include="Grpc.Core" Version="2.24.0" />
+        <PackageReference Include="Grpc.Reflection" Version="2.24.0" />
+        <PackageReference Include="Grpc.Tools" Version="2.24.0" PrivateAssets="All" />
+        <PackageReference Include="System.Reactive.Linq" Version="4.2.0" />
+        <PackageReference Include="System.Reactive" Version="4.2.0" />
+    </ItemGroup>
+</Project>

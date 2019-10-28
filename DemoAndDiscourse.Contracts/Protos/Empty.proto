@@ -1,0 +1,6 @@
+syntax = "proto3";
+option csharp_namespace = "DemoAndDiscourse.Contracts";
+package Author;
+
+message Empty {
+}
