@@ -15,14 +15,16 @@ namespace DemoAndDiscourse.Consumer
         public VehicleConsumerService(KafkaConsumer<Vehicle> consumer)
         {
             _consumer = consumer;
+            _consumer.Start();
         }
 
         public async Task StartAsync(CancellationToken cancellationToken)
         {
             await _consumer.Subscription.ForEachAsync(message =>
                 {
-                    Console.WriteLine($"[{message.Topic}:({message.Partition.Value}, {message.Offset.Value})]: {message.Message}");
-                    _consumer.Commit(message.Partition.Value, message.Offset.Value);
+                    Console.WriteLine($"[{message.Topic}:({message.Partition.Value}, {message.Offset.Value})]: {message.Message.Value}");
+
+                    _consumer.Commit(message.Partition, message.Offset);
                 },
                 cancellationToken);
         }

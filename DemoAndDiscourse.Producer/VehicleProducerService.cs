@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using Confluent.Kafka;
 using DemoAndDiscourse.Contracts;
 using DemoAndDiscourse.Kafka;
-using Google.Protobuf.WellKnownTypes;
 using Microsoft.Extensions.Hosting;
 
 namespace DemoAndDiscourse.Producer
@@ -23,7 +22,11 @@ namespace DemoAndDiscourse.Producer
             while (!cancellationToken.IsCancellationRequested)
             {
                 var randomVehicle = new Vehicle
-                    {Vin = RandomUtils.RandomVin, Year = RandomUtils.RandomInt(1920, 2020), CurrentLocationId = RandomUtils.RandomInt(1, 120)};
+                {
+                    Vin = RandomUtils.RandomVin,
+                    Year = RandomUtils.RandomInt(1920, 2020),
+                    CurrentLocationId = RandomUtils.RandomInt(1, 120)
+                };
                 await _producer.ProduceAsync(randomVehicle, null);
                 Console.WriteLine(randomVehicle.ToString());
 

@@ -51,15 +51,7 @@ namespace DemoAndDiscourse.Kafka
 
             foreach (var partition in partitions)
             {
-                var topicOffset = new TopicPartitionOffset(_topicName, partition, new Offset(offset));
-                _consumer.Assign(topicOffset);
-                try
-                {
-                    _consumer.Seek(topicOffset);
-                }
-                catch (KafkaException)
-                {
-                }
+                Seek(partition, offset);
             }
         }
 
@@ -80,6 +72,20 @@ namespace DemoAndDiscourse.Kafka
             catch
             {
                 return false;
+            }
+        }
+
+        private void Seek(Partition partition, Offset offset)
+        {
+            try
+            {
+                var topicOffset = new TopicPartitionOffset(_topicName, partition, offset);
+
+                _consumer.Assign(topicOffset);
+                _consumer.Seek(topicOffset);
+            }
+            catch (KafkaException)
+            {
             }
         }
 

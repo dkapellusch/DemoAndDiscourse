@@ -23,7 +23,7 @@ namespace DemoAndDiscourse.Consumer
                     {
                         BootstrapServers = "localhost:39092",
                         ClientId = Guid.NewGuid().ToString(),
-                        GroupId = "InventoryConsumer",
+                        GroupId = "InventoryConsumer2",
                         EnableAutoCommit = false,
                         AutoOffsetReset = AutoOffsetReset.Earliest
                     })
