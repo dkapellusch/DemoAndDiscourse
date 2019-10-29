@@ -1,10 +1,12 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Threading;
 using Confluent.Kafka;
 using DemoAndDiscourse.Utils;
 using Google.Protobuf;
+using Timestamp = Confluent.Kafka.Timestamp;
 
 namespace DemoAndDiscourse.Kafka
 {
@@ -35,20 +37,36 @@ namespace DemoAndDiscourse.Kafka
             if (Subscription != null) return;
 
             Subscription =
-                Observable.Start(() => ReadOne(token))
-                    .Expand(lv => Observable.Start(() => ReadOne(token)))
+                Observable.Start(ReadOne)
+                    .Expand(lv => Observable.Start(ReadOne))
                     .Where(m => m.IsNotNullOrDefault())
                     .TakeWhile(r => !token.IsCancellationRequested);
         }
 
-        public void SeekToTime(DateTime time)
+        public void SeekToOffset(long offset)
         {
-            var offset = _consumer.OffsetsForTimes(new[] {new TopicPartitionTimestamp(_topicName, Partition.Any, new Timestamp(time))}, TimeSpan.FromSeconds(30));
-            var firstOffset = offset.FirstOrDefault();
+            var partitions = _consumer.Assignment.Select(a => a.Partition);
 
-            if (firstOffset is null) return;
+            if (!partitions.Any()) partitions = new[] {new Partition()};
 
-            _consumer.Seek(firstOffset);
+            foreach (var partition in partitions)
+            {
+                var topicOffset = new TopicPartitionOffset(_topicName, partition, new Offset(offset));
+                _consumer.Assign(topicOffset);
+                try
+                {
+                    _consumer.Seek(topicOffset);
+                }
+                catch (KafkaException)
+                {
+                }
+            }
+        }
+
+        public IEnumerable<TopicPartitionOffset> GetOffsetsFromTime(DateTime time)
+        {
+            var partitions = _consumer.Assignment.Select(a => a.Partition);
+            return partitions.SelectMany(p => _consumer.OffsetsForTimes(new[] {new TopicPartitionTimestamp(_topicName, p, new Timestamp(time))}, TimeSpan.FromSeconds(30)));
         }
 
         public bool Commit(int partition, long offset)
@@ -65,21 +83,18 @@ namespace DemoAndDiscourse.Kafka
             }
         }
 
-        private ConsumeResult<string, TPayload> ReadOne(CancellationToken token)
+        private ConsumeResult<string, TPayload> ReadOne()
         {
-            while (!token.IsCancellationRequested)
+            try
             {
-                try
-                {
-                    var consumeResult = _consumer.Consume(TimeSpan.FromSeconds(90));
+                var consumeResult = _consumer.Consume(TimeSpan.FromMilliseconds(500));
 
-                    if (consumeResult?.Message is null || consumeResult.IsPartitionEOF || consumeResult.Value is null) continue;
+                if (consumeResult?.Message is null || consumeResult.IsPartitionEOF || consumeResult.Value is null) return null;
 
-                    return consumeResult;
-                }
-                catch (ConsumeException)
-                {
-                }
+                return consumeResult;
+            }
+            catch (ConsumeException)
+            {
             }
 
             return default;

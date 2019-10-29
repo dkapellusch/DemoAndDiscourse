@@ -22,7 +22,8 @@ namespace DemoAndDiscourse.Producer
         {
             while (!cancellationToken.IsCancellationRequested)
             {
-                var randomVehicle = new Vehicle {Vin = RandomUtils.RandomVin, PurchaseDate = RandomUtils.RandomDateTime.ToTimestamp(), Year = RandomUtils.RandomInt(1920, 2020)};
+                var randomVehicle = new Vehicle
+                    {Vin = RandomUtils.RandomVin, Year = RandomUtils.RandomInt(1920, 2020), CurrentLocationId = RandomUtils.RandomInt(1, 120)};
                 await _producer.ProduceAsync(randomVehicle, null);
                 Console.WriteLine(randomVehicle.ToString());
 

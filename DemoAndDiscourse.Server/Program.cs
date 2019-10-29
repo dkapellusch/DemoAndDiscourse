@@ -3,10 +3,12 @@ using System.Threading.Tasks;
 using Confluent.Kafka;
 using DemoAndDiscourse.Contracts;
 using DemoAndDiscourse.Kafka;
+using DemoAndDiscourse.Utils;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
+using Microsoft.Extensions.DependencyInjection;
 using LocationService = DemoAndDiscourse.Server.Services.LocationService;
 using VehicleService = DemoAndDiscourse.Server.Services.VehicleService;
 
@@ -30,6 +32,7 @@ namespace DemoAndDiscourse.Server
                 {
                     BootstrapServers = "localhost:39092",
                     ClientId = Guid.NewGuid().ToString(),
+                    GroupId = Guid.NewGuid().ToString(),
                     EnableAutoCommit = false,
                     AutoOffsetReset = AutoOffsetReset.Earliest
                 })
@@ -37,6 +40,7 @@ namespace DemoAndDiscourse.Server
                 {
                     BootstrapServers = "localhost:39092",
                     ClientId = Guid.NewGuid().ToString(),
+                    GroupId = Guid.NewGuid().ToString(),
                     EnableAutoCommit = false,
                     AutoOffsetReset = AutoOffsetReset.Earliest
                 })
@@ -50,6 +54,7 @@ namespace DemoAndDiscourse.Server
                     BootstrapServers = "localhost:39092",
                     ClientId = Guid.NewGuid().ToString()
                 })
+                .AddSingleton(typeof(IMessageSerializer<>), typeof(JsonMessageMessageSerializer<>))
             );
     }
 }

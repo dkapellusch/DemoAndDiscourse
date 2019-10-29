@@ -13,6 +13,7 @@ namespace DemoAndDiscourse.Producer
     {
         public static async Task Main(string[] args)
         {
+
             await CreateHostBuilder(args).Build().RunAsync();
         }
 
@@ -20,11 +21,10 @@ namespace DemoAndDiscourse.Producer
             Host.CreateDefaultBuilder(args)
                 .ConfigureServices((hostContext, services) =>
                     services.AddKafkaProducer<Null, Vehicle>(new ProducerConfig
-                            {
-                                BootstrapServers = "localhost:39092",
-                                ClientId = Guid.NewGuid().ToString()
-                            },
-                            "Vehicles")
+                        {
+                            BootstrapServers = "localhost:39092",
+                            ClientId = Guid.NewGuid().ToString()
+                        })
                         .AddSingleton(typeof(IMessageSerializer<>), typeof(JsonMessageMessageSerializer<>))
                         .AddHostedService<VehicleProducerService>()
                 )

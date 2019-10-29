@@ -1,5 +1,7 @@
+using System.Text;
 using AutoMapper;
 using DemoAndDiscourse.Contracts;
+using Google.Protobuf.WellKnownTypes;
 
 namespace DemoAndDiscourse.Utils
 {
@@ -26,8 +28,7 @@ namespace DemoAndDiscourse.Utils
                         .ForMember(p => p.Make, opts => opts.MapFrom(s => s[1]))
                         .ForMember(p => p.Model, opts => opts.MapFrom(s => s[2]))
                         .ForMember(p => p.Year, opts => opts.MapFrom(s => s[3]))
-                        .ForMember(p => p.PurchaseDate, opts => opts.MapFrom(s => s[4]))
-                        .ForMember(p => p.CurrentLocationId, opts => opts.MapFrom(s => s[5]));
+                        .ForMember(p => p.CurrentLocationId, opts => opts.MapFrom(s => s[4]));
 
                     c.CreateMap<string[], Location>()
                         .ForMember(p => p.LocationId, opts => opts.MapFrom(s => s[0]))

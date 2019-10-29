@@ -18,18 +18,17 @@ namespace DemoAndDiscourse.Consumer
 
         private static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
-                .ConfigureServices((hostContext, services) =>
-                    services.AddKafkaConsumer<Vehicle>(new ConsumerConfig
-                            {
-                                BootstrapServers = "localhost:39092",
-                                ClientId = Guid.NewGuid().ToString(),
-                                GroupId = "InventoryConsumer",
-                                EnableAutoCommit = false,
-                                AutoOffsetReset = AutoOffsetReset.Earliest
-                            },
-                            "Vehicles")
-                        .AddSingleton(typeof(IMessageSerializer<>), typeof(JsonMessageMessageSerializer<>))
-                        .AddHostedService<VehicleConsumerService>()
+                .ConfigureServices((hostContext, services) => services
+                    .AddKafkaConsumer<Vehicle>(new ConsumerConfig
+                    {
+                        BootstrapServers = "localhost:39092",
+                        ClientId = Guid.NewGuid().ToString(),
+                        GroupId = "InventoryConsumer",
+                        EnableAutoCommit = false,
+                        AutoOffsetReset = AutoOffsetReset.Earliest
+                    })
+                    .AddSingleton(typeof(IMessageSerializer<>), typeof(JsonMessageMessageSerializer<>))
+                    .AddHostedService<VehicleConsumerService>()
                 )
                 .UseConsoleLifetime();
     }
