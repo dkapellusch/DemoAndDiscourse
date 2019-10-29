@@ -4,4 +4,21 @@
         <TargetFramework>netcoreapp3.0</TargetFramework>
     </PropertyGroup>
 
+    <ItemGroup>
+        <PackageReference Include="Confluent.Kafka" Version="1.2.1" />
+        <PackageReference Include="Microsoft.Extensions.Http" Version="3.0.0" />
+        <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
+
+        <PackageReference Include="System.Reactive" Version="4.2.0" />
+        <PackageReference Include="System.Reactive.Core" Version="4.2.0" />
+        <PackageReference Include="System.Reactive.Linq" Version="4.2.0" />
+
+        <PackageReference Include="Microsoft.Extensions.Hosting" Version="3.0.0" />
+        <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="3.0.0" />
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="3.0.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\DemoAndDiscourse.Utils\DemoAndDiscourse.Utils.csproj" />
+    </ItemGroup>
 </Project>

@@ -1,0 +1,32 @@
+syntax = "proto3";
+option csharp_namespace = "DemoAndDiscourse.Contracts";
+package DD;
+
+import "google/protobuf/timestamp.proto";
+import "Empty.proto";
+
+message Vehicle {
+    string Vin = 1;
+    string Make = 2;
+    string Model = 3;
+    int32 Year = 4;
+    google.protobuf.Timestamp PurchaseDate = 5;
+}
+
+message VehicleRequest {
+    string Vin = 1;
+}
+
+service VehicleService {
+    rpc AddVehicle (Vehicle) returns (Vehicle) {
+    }
+
+    rpc GetVehicleStream (Empty) returns (stream Vehicle) {
+    }
+
+    rpc BiDirectionalVehicleStream (stream Vehicle) returns (stream Vehicle) {
+    }
+
+    rpc GetVehicle (VehicleRequest) returns (Vehicle) {
+    }
+}

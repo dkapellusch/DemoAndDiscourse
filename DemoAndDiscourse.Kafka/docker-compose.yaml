@@ -20,6 +20,9 @@ services:
       KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_BROKER_ID: 1
+    restart: always
+    depends_on:
+      - "DDZookeeper"
     networks:
       - "dd-net"
   KSQL:
@@ -30,20 +33,30 @@ services:
     environment:
       KSQL_BOOTSTRAP_SERVERS: "DDKafka:39093"
       KSQL_LISTENERS: "http://0.0.0.0:8088/,https://0.0.0.0:8089/"
+    restart: always
+    depends_on:
+      - "DDKafka"
     networks:
       - "dd-net"
-#  DDKafka2:
-#    image: "confluentinc/cp-kafka:latest"
-#    ports:
-#      - "49092:49092"
-#    environment:
-#      KAFKA_ZOOKEEPER_CONNECT: "DDZookeeper:32181"
-#      KAFKA_ADVERTISED_LISTENERS: "PLAINTEXT://DDKafka2:39093,PLAINTEXT_HOST://localhost:49092"
-#      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: "PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT"
-#      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
-#      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
-#      KAFKA_BROKER_ID: 2
-#    networks:
-#      - "dd-net"
+  DDKafka2:
+    image: "confluentinc/cp-kafka:latest"
+    ports:
+      - "49092:49092"
+    environment:
+      KAFKA_ZOOKEEPER_CONNECT: "DDZookeeper:32181"
+      KAFKA_ADVERTISED_LISTENERS: "PLAINTEXT://DDKafka2:39093,PLAINTEXT_HOST://localhost:49092"
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: "PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT"
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_BROKER_ID: 2
+    restart: always
+    depends_on:
+      - "DDZookeeper"
+    networks:
+      - "dd-net"
 networks:
   dd-net:
+    
+    
+#docker run --net=host -it confluentinc/cp-ksql-cli http://0.0.0.0:8088
+#  CREATE STREAM vehicles (vin string) WITH (KAFKA_TOPIC='Vehicles',VALUE_FORMAT='JSON');

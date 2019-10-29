@@ -1,10 +1,8 @@
-﻿using System;
-
-namespace DemoAndDiscourse.Server
+﻿namespace DemoAndDiscourse.Server
 {
-    class Program
+    internal class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
         }
     }
