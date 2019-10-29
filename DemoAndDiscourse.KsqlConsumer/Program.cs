@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Reactive.Linq;
-using System.Threading.Channels;
 using System.Threading.Tasks;
 using DemoAndDiscourse.Contracts;
 using DemoAndDiscourse.Kafka.Ksql;
@@ -13,22 +11,20 @@ namespace DemoAndDiscourse.KsqlConsumer
     {
         static async Task Main(string[] args)
         {
-            var host = Host.CreateDefaultBuilder(args)
+            await Host.CreateDefaultBuilder(args)
                 .ConfigureServices(services =>
                     services
                         .AddTableMapper()
                         .AddKsqlClient(new Uri("http://localhost:8088/query"))
                         .AddKsqlConsumer<Vehicle>(new KsqlQuery
                         {
-                            Ksql = "select * from vehicles limit 1;",
+                            Ksql = "SELECT * from VEHICLES limit 1;",
                             StreamProperties = {{"auto.offset.reset", "earliest"}}
                         })
+                        .AddHostedService<KsqlConsumerService>()
                 )
-                .Build();
-
-            var kCOnsumer = host.Services.GetService<KafkaKsqlConsumer<Vehicle>>();
-            kCOnsumer.Start(default);
-            await kCOnsumer.Subscription.ForEachAsync(Console.WriteLine);
+                .Build()
+                .RunAsync();
         }
     }
 }

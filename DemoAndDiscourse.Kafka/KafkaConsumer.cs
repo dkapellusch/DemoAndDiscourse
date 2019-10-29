@@ -43,6 +43,24 @@ namespace DemoAndDiscourse.Kafka
                     .TakeWhile(r => !token.IsCancellationRequested);
         }
 
+        private ConsumeResult<string, TPayload> ReadOne()
+        {
+            try
+            {
+                var consumeResult = _consumer.Consume(TimeSpan.FromMilliseconds(500));
+
+                if (consumeResult?.Message is null || consumeResult.IsPartitionEOF || consumeResult.Value is null) return null;
+
+                return consumeResult;
+            }
+            catch (ConsumeException)
+            {
+            }
+
+            return default;
+        }
+
+
         public void SeekToOffset(long offset)
         {
             var partitions = _consumer.Assignment.Select(a => a.Partition);
@@ -87,23 +105,6 @@ namespace DemoAndDiscourse.Kafka
             catch (KafkaException)
             {
             }
-        }
-
-        private ConsumeResult<string, TPayload> ReadOne()
-        {
-            try
-            {
-                var consumeResult = _consumer.Consume(TimeSpan.FromMilliseconds(500));
-
-                if (consumeResult?.Message is null || consumeResult.IsPartitionEOF || consumeResult.Value is null) return null;
-
-                return consumeResult;
-            }
-            catch (ConsumeException)
-            {
-            }
-
-            return default;
         }
     }
 }

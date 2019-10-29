@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Reactive.Linq;
+using DemoAndDiscourse.Utils;
 using Grpc.Core;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -32,7 +33,7 @@ namespace DemoAndDiscourse.Server
                     return hasNext ? streamReader.Current : null;
                 })
                 .Repeat()
-                .TakeWhile(data => !(data is null));
+                .TakeWhile(data => data.IsNotNullOrDefault());
         }
     }
 }
