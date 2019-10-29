@@ -8,7 +8,7 @@ using Newtonsoft.Json;
 
 namespace DemoAndDiscourse.Kafka.Ksql
 {
-    public class KsqlClient
+    public sealed class KsqlClient
     {
         private readonly HttpClient _client;
 

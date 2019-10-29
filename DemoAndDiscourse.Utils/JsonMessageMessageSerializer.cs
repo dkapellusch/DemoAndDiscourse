@@ -4,7 +4,7 @@ using Google.Protobuf.Reflection;
 
 namespace DemoAndDiscourse.Utils
 {
-    public class JsonMessageMessageSerializer<TMessage> : IMessageSerializer<TMessage> where TMessage : IMessage<TMessage>, new()
+    public sealed class JsonMessageMessageSerializer<TMessage> : IMessageSerializer<TMessage> where TMessage : IMessage<TMessage>, new()
     {
         private readonly Encoding _encoding;
         private readonly JsonFormatter _jsonFormatter = new JsonFormatter(JsonFormatter.Settings.Default.WithTypeRegistry(TypeRegistry.FromMessages(new TMessage().Descriptor)));

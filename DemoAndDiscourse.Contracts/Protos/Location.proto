@@ -1,0 +1,31 @@
+syntax = "proto3";
+option csharp_namespace = "DemoAndDiscourse.Contracts";
+package DD;
+
+import "Empty.proto";
+
+message Location {
+    int32 LocationId = 1;
+    string LocationName = 2;
+}
+
+message LocationRequest {
+    oneof Identifier {
+        int32 LocationId = 1;
+        string LocationName = 2;
+    }
+}
+
+service LocationService {
+    rpc AddLocation (Location) returns (Location) {
+    }
+
+    rpc GetLocationStream (Empty) returns (stream Location) {
+    }
+
+    rpc BiDirectionalLocationStream (stream Location) returns (stream Location) {
+    }
+
+    rpc GetLocation (LocationRequest) returns (Location) {
+    }
+}

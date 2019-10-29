@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Reactive.Linq;
 using System.Threading;
 using Confluent.Kafka;
@@ -12,15 +13,15 @@ namespace DemoAndDiscourse.Kafka
         private readonly IConsumer<string, TPayload> _consumer;
         private readonly string _topicName;
 
-        public KafkaConsumer(ConsumerConfig config, string topicName, IMessageSerializer<TPayload> serializer)
+        public KafkaConsumer(ConsumerConfig config, IMessageSerializer<TPayload> serializer, string topicName = null)
         {
-            _topicName = topicName;
+            _topicName = topicName ?? $"{typeof(TPayload).Name}s";
             _consumer = new ConsumerBuilder<string, TPayload>(config)
                 .SetValueDeserializer(new KafkaSerializer<TPayload>(serializer))
                 .Build();
         }
 
-        public IObservable<TPayload> Subscription { get; set; }
+        public IObservable<ConsumeResult<string, TPayload>> Subscription { get; set; }
 
         public void Dispose()
         {
@@ -40,6 +41,16 @@ namespace DemoAndDiscourse.Kafka
                     .TakeWhile(r => !token.IsCancellationRequested);
         }
 
+        public void SeekToTime(DateTime time)
+        {
+            var offset = _consumer.OffsetsForTimes(new[] {new TopicPartitionTimestamp(_topicName, Partition.Any, new Timestamp(time))}, TimeSpan.FromSeconds(30));
+            var firstOffset = offset.FirstOrDefault();
+
+            if (firstOffset is null) return;
+
+            _consumer.Seek(firstOffset);
+        }
+
         public bool Commit(int partition, long offset)
         {
             try
@@ -54,7 +65,7 @@ namespace DemoAndDiscourse.Kafka
             }
         }
 
-        private TPayload ReadOne(CancellationToken token)
+        private ConsumeResult<string, TPayload> ReadOne(CancellationToken token)
         {
             while (!token.IsCancellationRequested)
             {
@@ -64,7 +75,7 @@ namespace DemoAndDiscourse.Kafka
 
                     if (consumeResult?.Message is null || consumeResult.IsPartitionEOF || consumeResult.Value is null) continue;
 
-                    return consumeResult.Message.Value;
+                    return consumeResult;
                 }
                 catch (ConsumeException)
                 {

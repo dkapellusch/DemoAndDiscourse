@@ -9,7 +9,7 @@ using Microsoft.Extensions.Hosting;
 
 namespace DemoAndDiscourse.Producer
 {
-    public class VehicleProducerService : IHostedService
+    public sealed class VehicleProducerService : IHostedService
     {
         private readonly KafkaProducer<Null, Vehicle> _producer;
 

@@ -11,6 +11,7 @@ message Vehicle {
     string Model = 3;
     int32 Year = 4;
     google.protobuf.Timestamp PurchaseDate = 5;
+    int32 CurrentLocationId = 6;
 }
 
 message VehicleRequest {
@@ -21,12 +22,12 @@ service VehicleService {
     rpc AddVehicle (Vehicle) returns (Vehicle) {
     }
 
+    rpc GetVehicle (VehicleRequest) returns (Vehicle) {
+    }
+
     rpc GetVehicleStream (Empty) returns (stream Vehicle) {
     }
 
     rpc BiDirectionalVehicleStream (stream Vehicle) returns (stream Vehicle) {
-    }
-
-    rpc GetVehicle (VehicleRequest) returns (Vehicle) {
     }
 }

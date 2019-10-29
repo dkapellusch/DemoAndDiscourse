@@ -10,6 +10,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DemoAndDiscourse.Utils", "D
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DemoAndDiscourse.Server", "DemoAndDiscourse.Server\DemoAndDiscourse.Server.csproj", "{DA343AB8-4C5A-425F-90C4-DC8010045585}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DemoAndDIscourse.Consumer", "DemoAndDIscourse.Consumer\DemoAndDIscourse.Consumer.csproj", "{2D112E83-48E8-415B-80C4-6FDFF2B56367}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -36,5 +38,9 @@ Global
 		{DA343AB8-4C5A-425F-90C4-DC8010045585}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DA343AB8-4C5A-425F-90C4-DC8010045585}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DA343AB8-4C5A-425F-90C4-DC8010045585}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2D112E83-48E8-415B-80C4-6FDFF2B56367}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2D112E83-48E8-415B-80C4-6FDFF2B56367}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2D112E83-48E8-415B-80C4-6FDFF2B56367}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2D112E83-48E8-415B-80C4-6FDFF2B56367}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

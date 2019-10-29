@@ -12,9 +12,9 @@ namespace DemoAndDiscourse.Kafka
         private readonly string _topicName;
         private readonly IProducer<TKey, TPayload> _producer;
 
-        public KafkaProducer(ProducerConfig config, string topicName, IMessageSerializer<TPayload> serializer)
+        public KafkaProducer(ProducerConfig config, IMessageSerializer<TPayload> serializer, string topicName = null)
         {
-            _topicName = topicName;
+            _topicName = topicName ?? $"{typeof(TPayload).Name}s";
             _producer = new ProducerBuilder<TKey, TPayload>(config)
                 .SetValueSerializer(new KafkaSerializer<TPayload>(serializer))
                 .Build();
