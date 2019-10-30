@@ -16,10 +16,7 @@ namespace DemoAndDiscourse.Server
 {
     internal class Program
     {
-        public static async Task Main(string[] args)
-        {
-            await CreateHostBuilder(args).Build().RunAsync();
-        }
+        public static async Task Main(string[] args) => await CreateHostBuilder(args).Build().RunAsync();
 
         private static IWebHostBuilder CreateHostBuilder(string[] args) => WebHost.CreateDefaultBuilder(args)
             .ConfigureKestrel(options => options.ListenLocalhost(5000, o => o.Protocols = HttpProtocols.Http2))
@@ -54,7 +51,7 @@ namespace DemoAndDiscourse.Server
                     BootstrapServers = "localhost:39092",
                     ClientId = Guid.NewGuid().ToString()
                 })
-                .AddSingleton(typeof(IMessageSerializer<>), typeof(JsonMessageMessageSerializer<>))
+                .AddSingleton(typeof(IMessageSerializer<>), typeof(JsonMessageSerializer<>))
             );
     }
 }

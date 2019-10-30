@@ -6,7 +6,6 @@ using System.Threading;
 using Confluent.Kafka;
 using DemoAndDiscourse.Utils;
 using Google.Protobuf;
-using Timestamp = Confluent.Kafka.Timestamp;
 
 namespace DemoAndDiscourse.Kafka
 {
@@ -23,7 +22,7 @@ namespace DemoAndDiscourse.Kafka
                 .Build();
         }
 
-        public IObservable<ConsumeResult<string, TPayload>> Subscription { get; set; }
+        public IObservable<ConsumeResult<string, TPayload>> Subscription { get; private set; }
 
         public void Dispose()
         {
@@ -59,7 +58,6 @@ namespace DemoAndDiscourse.Kafka
 
             return default;
         }
-
 
         public void SeekToOffset(long offset)
         {

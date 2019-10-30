@@ -17,7 +17,7 @@ namespace DemoAndDiscourse.Kafka.Ksql
             _client = client;
         }
 
-        public async Task<Stream> ExecuteQuery(KsqlQuery query, CancellationToken token = default)
+        public async Task<Stream> ExecuteQueryAsync(KsqlQuery query, CancellationToken token = default)
         {
             var request = JsonConvert.SerializeObject(query);
             var response = await _client.SendAsync(new HttpRequestMessage(HttpMethod.Post, "")

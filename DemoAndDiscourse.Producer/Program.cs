@@ -21,7 +21,7 @@ namespace DemoAndDiscourse.Producer
                             BootstrapServers = "localhost:39092",
                             ClientId = Guid.NewGuid().ToString()
                         })
-                        .AddSingleton(typeof(IMessageSerializer<>), typeof(JsonMessageMessageSerializer<>))
+                        .AddSingleton(typeof(IMessageSerializer<>), typeof(JsonMessageSerializer<>))
                         .AddHostedService<VehicleProducerService>()
                 )
                 .UseConsoleLifetime();

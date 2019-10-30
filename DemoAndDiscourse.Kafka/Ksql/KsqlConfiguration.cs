@@ -23,15 +23,13 @@ namespace DemoAndDiscourse.Kafka.Ksql
             return services;
         }
 
-        public static IServiceCollection AddKsqlConsumer<TRow>(this IServiceCollection services, KsqlQuery query)
-        {
-            return services.AddTransient(provider =>
+        public static IServiceCollection AddKsqlConsumer<TRow>(this IServiceCollection services, KsqlQuery query) =>
+            services.AddTransient(provider =>
                 new KafkaKsqlConsumer<TRow>(
                     provider.GetService<KsqlClient>(),
                     query,
                     provider.GetService<TableMapper>()
                 )
             );
-        }
     }
 }

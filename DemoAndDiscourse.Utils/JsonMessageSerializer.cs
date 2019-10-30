@@ -4,17 +4,17 @@ using Google.Protobuf.Reflection;
 
 namespace DemoAndDiscourse.Utils
 {
-    public sealed class JsonMessageMessageSerializer<TMessage> : IMessageSerializer<TMessage> where TMessage : IMessage<TMessage>, new()
+    public sealed class JsonMessageSerializer<TMessage> : IMessageSerializer<TMessage> where TMessage : IMessage<TMessage>, new()
     {
         private readonly Encoding _encoding;
         private readonly JsonFormatter _jsonFormatter = new JsonFormatter(JsonFormatter.Settings.Default.WithTypeRegistry(TypeRegistry.FromMessages(new TMessage().Descriptor)));
         private readonly JsonParser _jsonParser = new JsonParser(new JsonParser.Settings(1000, TypeRegistry.FromMessages(new TMessage().Descriptor)));
 
-        public JsonMessageMessageSerializer() : this(Encoding.UTF8)
+        public JsonMessageSerializer() : this(Encoding.UTF8)
         {
         }
 
-        public JsonMessageMessageSerializer(Encoding encoding)
+        public JsonMessageSerializer(Encoding encoding)
         {
             _encoding = encoding;
         }

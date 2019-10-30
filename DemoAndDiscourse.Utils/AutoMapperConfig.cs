@@ -1,7 +1,5 @@
-using System.Text;
 using AutoMapper;
 using DemoAndDiscourse.Contracts;
-using Google.Protobuf.WellKnownTypes;
 
 namespace DemoAndDiscourse.Utils
 {
@@ -24,15 +22,15 @@ namespace DemoAndDiscourse.Utils
             return new MapperConfiguration(c =>
                 {
                     c.CreateMap<string[], Vehicle>()
-                        .ForMember(p => p.Vin, opts => opts.MapFrom(s => s[0]))
-                        .ForMember(p => p.Make, opts => opts.MapFrom(s => s[1]))
-                        .ForMember(p => p.Model, opts => opts.MapFrom(s => s[2]))
-                        .ForMember(p => p.Year, opts => opts.MapFrom(s => s[3]))
-                        .ForMember(p => p.CurrentLocationId, opts => opts.MapFrom(s => s[4]));
+                        .ForMember(v => v.Vin, opts => opts.MapFrom(s => s[0]))
+                        .ForMember(v => v.Make, opts => opts.MapFrom(s => s[1]))
+                        .ForMember(v => v.Model, opts => opts.MapFrom(s => s[2]))
+                        .ForMember(v => v.Year, opts => opts.MapFrom(s => s[3]))
+                        .ForMember(v => v.CurrentLocationId, opts => opts.MapFrom(s => s[4]));
 
                     c.CreateMap<string[], Location>()
-                        .ForMember(p => p.LocationId, opts => opts.MapFrom(s => s[0]))
-                        .ForMember(p => p.LocationName, opts => opts.MapFrom(s => s[1]));
+                        .ForMember(l => l.LocationId, opts => opts.MapFrom(s => s[0]))
+                        .ForMember(l => l.LocationName, opts => opts.MapFrom(s => s[1]));
                 }
             ).CreateMapper();
         }

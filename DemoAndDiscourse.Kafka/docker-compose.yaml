@@ -58,6 +58,6 @@ networks:
   dd-net:
 
   #  docker run --net=host -it confluentinc/cp-ksql-cli http://0.0.0.0:8088
-  #  CREATE STREAM vehicles (vin string, make string, model string,  year int,  purchaseDate string, currentLocationId int) WITH (KAFKA_TOPIC='Vehicles',VALUE_FORMAT='JSON');
-  #  CREATE STREAM locations (locationId int, LocationName string) WITH (KAFKA_TOPIC='Locations',VALUE_FORMAT='JSON');
-#  CREATE STREAM vehicles_at_location AS SELECT v.vin, v.currentLocationId, l.locationId, l.locationName FROM vehicles v LEFT JOIN locations l WITHIN 1 HOURS  ON v.currentLocationId = l.locationId ;
+  #  CREATE STREAM vehicles (vin string, make string, model string,  year int, currentLocationId int) WITH (KAFKA_TOPIC='Vehicles', VALUE_FORMAT='JSON');
+  #  CREATE STREAM locations (locationId int, LocationName string) WITH (KAFKA_TOPIC='Locations', VALUE_FORMAT='JSON');
+  #  CREATE STREAM vehicles_at_location AS SELECT v.vin, v.currentLocationId, l.locationId, l.locationName FROM vehicles v LEFT JOIN locations l WITHIN 1 HOURS  ON v.currentLocationId = l.locationId ;

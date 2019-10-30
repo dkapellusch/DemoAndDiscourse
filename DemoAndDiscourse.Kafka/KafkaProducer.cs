@@ -9,8 +9,8 @@ namespace DemoAndDiscourse.Kafka
 {
     public sealed class KafkaProducer<TKey, TPayload> : IDisposable where TPayload : IMessage<TPayload>, new()
     {
-        private readonly string _topicName;
         private readonly IProducer<TKey, TPayload> _producer;
+        private readonly string _topicName;
 
         public KafkaProducer(ProducerConfig config, IMessageSerializer<TPayload> serializer, string topicName = null)
         {
@@ -20,6 +20,8 @@ namespace DemoAndDiscourse.Kafka
                 .Build();
         }
 
+        public void Dispose() => _producer?.Dispose();
+
         public async Task<DeliveryResult<TKey, TPayload>> ProduceAsync(TPayload payload, TKey key)
         {
             var message = new Message<TKey, TPayload> {Key = key, Value = payload};
@@ -27,7 +29,5 @@ namespace DemoAndDiscourse.Kafka
         }
 
         public void Flush(CancellationToken token = default) => _producer.Flush(token);
-
-        public void Dispose() => _producer?.Dispose();
     }
 }

@@ -7,24 +7,22 @@ using Microsoft.Extensions.Hosting;
 
 namespace DemoAndDiscourse.KsqlConsumer
 {
-    class Program
+    internal static class Program
     {
-        static async Task Main(string[] args)
-        {
-            await Host.CreateDefaultBuilder(args)
+        private static async Task Main(string[] args) => await CreateHostBuilder(args).Build().RunAsync();
+
+        private static IHostBuilder CreateHostBuilder(string[] args) =>
+            Host.CreateDefaultBuilder(args)
                 .ConfigureServices(services =>
                     services
                         .AddTableMapper()
                         .AddKsqlClient(new Uri("http://localhost:8088/query"))
                         .AddKsqlConsumer<Vehicle>(new KsqlQuery
                         {
-                            Ksql = "SELECT * from VEHICLES limit 1;",
+                            Ksql = "SELECT * FROM VEHICLES LIMIT 1;",
                             StreamProperties = {{"auto.offset.reset", "earliest"}}
                         })
                         .AddHostedService<KsqlConsumerService>()
-                )
-                .Build()
-                .RunAsync();
-        }
+                );
     }
 }

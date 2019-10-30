@@ -39,8 +39,6 @@ namespace DemoAndDiscourse.Server.Services
         }
 
         public override async Task GetVehicleStream(Empty request, IServerStreamWriter<Vehicle> responseStream, ServerCallContext context)
-        {
-            await _vehicleConsumer.Subscription.ForEachAsync(async v => await responseStream.WriteAsync(v.Value), context.CancellationToken);
-        }
+            => await _vehicleConsumer.Subscription.ForEachAsync(async v => await responseStream.WriteAsync(v.Value), context.CancellationToken);
     }
 }

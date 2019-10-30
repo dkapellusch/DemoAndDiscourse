@@ -11,10 +11,7 @@ namespace DemoAndDiscourse.Consumer
 {
     internal static class Program
     {
-        public static async Task Main(string[] args)
-        {
-            await CreateHostBuilder(args).Build().RunAsync();
-        }
+        public static async Task Main(string[] args) => await CreateHostBuilder(args).Build().RunAsync();
 
         private static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
@@ -27,7 +24,7 @@ namespace DemoAndDiscourse.Consumer
                         EnableAutoCommit = false,
                         AutoOffsetReset = AutoOffsetReset.Earliest
                     })
-                    .AddSingleton(typeof(IMessageSerializer<>), typeof(JsonMessageMessageSerializer<>))
+                    .AddSingleton(typeof(IMessageSerializer<>), typeof(JsonMessageSerializer<>))
                     .AddHostedService<VehicleConsumerService>()
                 )
                 .UseConsoleLifetime();

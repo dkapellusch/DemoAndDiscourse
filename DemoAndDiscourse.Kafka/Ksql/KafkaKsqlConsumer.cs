@@ -15,8 +15,8 @@ namespace DemoAndDiscourse.Kafka.Ksql
     public sealed class KafkaKsqlConsumer<TRow>
     {
         private readonly KsqlClient _ksqlRestClient;
-        private readonly KsqlQuery _query;
         private readonly TableMapper _mapper;
+        private readonly KsqlQuery _query;
         private Subject<TRow> _streamSubject;
 
         public KafkaKsqlConsumer(KsqlClient ksqlRestClient, KsqlQuery query, TableMapper mapper)
@@ -34,12 +34,12 @@ namespace DemoAndDiscourse.Kafka.Ksql
                 return;
 
             _streamSubject = new Subject<TRow>();
-            _ = Consume(token);
+            _ = Task.Run(async () => await ConsumeAsync(token), token);
         }
 
-        private async Task Consume(CancellationToken token)
+        private async Task ConsumeAsync(CancellationToken token)
         {
-            await using var queryStream = await _ksqlRestClient.ExecuteQuery(_query, token);
+            await using var queryStream = await _ksqlRestClient.ExecuteQueryAsync(_query, token);
             using var streamReader = new StreamReader(queryStream);
 
             while (!streamReader.EndOfStream && !token.IsCancellationRequested)
