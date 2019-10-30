@@ -13,13 +13,13 @@ namespace DemoAndDiscourse.Kafka
             _messageSerializer = messageSerializer;
         }
 
-        public TMessage Deserialize(ReadOnlySpan<byte> data, bool isNull, SerializationContext context)
-            => isNull || data.IsEmpty || data.Length <= 0
+        public TMessage Deserialize(ReadOnlySpan<byte> data, bool isNull, SerializationContext context) =>
+            isNull || data.IsEmpty || data.Length <= 0
                 ? default
                 : _messageSerializer.Deserialize(data.ToArray());
 
-        public byte[] Serialize(TMessage data, SerializationContext context)
-            => data is null
+        public byte[] Serialize(TMessage data, SerializationContext context) =>
+            data is null
                 ? null
                 : _messageSerializer.Serialize(data);
     }

@@ -39,8 +39,8 @@ namespace DemoAndDiscourse.Kafka
             await Task.Delay(1000);
         }
 
-        public async Task ChangePartitionCountAsync(string topic, int partitionCount)
-            => await _innerClient.CreatePartitionsAsync(new[] {new PartitionsSpecification {Topic = topic, IncreaseTo = partitionCount}});
+        public async Task ChangePartitionCountAsync(string topic, int partitionCount) =>
+            await _innerClient.CreatePartitionsAsync(new[] {new PartitionsSpecification {Topic = topic, IncreaseTo = partitionCount}});
 
 
         public Metadata GetMetadata(TimeSpan? timeout = null) => _innerClient.GetMetadata(timeout ?? TimeSpan.FromMinutes(1));

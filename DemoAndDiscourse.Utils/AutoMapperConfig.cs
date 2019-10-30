@@ -17,9 +17,8 @@ namespace DemoAndDiscourse.Utils
 
     public static class AutoMapperConfig
     {
-        public static IMapper GetMapper()
-        {
-            return new MapperConfiguration(c =>
+        public static IMapper GetMapper() =>
+            new MapperConfiguration(c =>
                 {
                     c.CreateMap<string[], Vehicle>()
                         .ForMember(v => v.Vin, opts => opts.MapFrom(s => s[0]))
@@ -33,6 +32,5 @@ namespace DemoAndDiscourse.Utils
                         .ForMember(l => l.LocationName, opts => opts.MapFrom(s => s[1]));
                 }
             ).CreateMapper();
-        }
     }
 }

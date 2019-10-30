@@ -38,7 +38,7 @@ namespace DemoAndDiscourse.Server.Services
             return vehicle.Value;
         }
 
-        public override async Task GetVehicleStream(Empty request, IServerStreamWriter<Vehicle> responseStream, ServerCallContext context)
-            => await _vehicleConsumer.Subscription.ForEachAsync(async v => await responseStream.WriteAsync(v.Value), context.CancellationToken);
+        public override async Task GetVehicleStream(Empty request, IServerStreamWriter<Vehicle> responseStream, ServerCallContext context) =>
+            await _vehicleConsumer.Subscription.ForEachAsync(async v => await responseStream.WriteAsync(v.Value), context.CancellationToken);
     }
 }

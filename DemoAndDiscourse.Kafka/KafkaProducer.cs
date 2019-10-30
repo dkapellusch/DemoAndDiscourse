@@ -22,11 +22,8 @@ namespace DemoAndDiscourse.Kafka
 
         public void Dispose() => _producer?.Dispose();
 
-        public async Task<DeliveryResult<TKey, TPayload>> ProduceAsync(TPayload payload, TKey key)
-        {
-            var message = new Message<TKey, TPayload> {Key = key, Value = payload};
-            return await _producer.ProduceAsync(_topicName, message);
-        }
+        public async Task<DeliveryResult<TKey, TPayload>> ProduceAsync(TPayload payload, TKey key) =>
+            await _producer.ProduceAsync(_topicName, new Message<TKey, TPayload> {Key = key, Value = payload});
 
         public void Flush(CancellationToken token = default) => _producer.Flush(token);
     }
