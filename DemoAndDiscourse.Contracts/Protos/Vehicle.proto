@@ -9,21 +9,34 @@ message Vehicle {
     string Vin = 1;
     string Make = 2;
     string Model = 3;
-    int32 Year = 4;
-    int32 CurrentLocationId = 5;
+    string LocationCode = 4;
+}
+
+message Vehicles {
+    repeated Vehicle Elements = 1;
 }
 
 message VehicleRequest {
-    string Vin = 1;
+    oneof Identifier {
+        string Vin = 1;
+    }
 }
 
-service VehicleService {
-    rpc AddVehicle (Vehicle) returns (Vehicle) {
-    }
-
+service VehicleRead {
     rpc GetVehicle (VehicleRequest) returns (Vehicle) {
     }
 
-    rpc GetVehicleStream (Empty) returns (stream Vehicle) {
+    rpc GetAllVehicles (Empty) returns (Vehicles) {
+    }
+
+    rpc GetVehicleUpdates (Empty) returns (stream Vehicle) {
+    }
+}
+
+service VehicleWrite {
+    rpc AddVehicle (Vehicle) returns (Vehicle) {
+    }
+
+    rpc AddVehicles (stream Vehicle) returns (stream Vehicle) {
     }
 }

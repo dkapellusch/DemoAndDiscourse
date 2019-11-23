@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace DemoAndDiscourse.Producer
+namespace DemoAndDiscourse.Utils
 {
     public static class RandomUtils
     {

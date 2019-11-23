@@ -7,19 +7,35 @@ import "Empty.proto";
 message Location {
     int32 LocationId = 1;
     string LocationName = 2;
+    string LocationCode = 3;
+}
+
+message Locations {
+    repeated Location Elements = 1;
 }
 
 message LocationRequest {
     oneof Identifier {
         int32 LocationId = 1;
         string LocationName = 2;
+        string LocationCode = 3;
     }
 }
 
-service LocationService {
+service LocationWrite {
     rpc AddLocation (Location) returns (Location) {
     }
+    rpc AddLocations (stream Location) returns (stream Location) {
+    }
+}
 
+service LocationRead {
     rpc GetLocation (LocationRequest) returns (Location) {
+    }
+
+    rpc GetAllLocations (Empty) returns (Locations) {
+    }
+
+    rpc GetLocationUpdates (Empty) returns (stream Location) {
     }
 }

@@ -2,17 +2,16 @@ using System;
 using System.Reactive.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using DemoAndDiscourse.Contracts;
 using DemoAndDiscourse.Kafka.Ksql;
 using Microsoft.Extensions.Hosting;
 
 namespace DemoAndDiscourse.KsqlConsumer
 {
-    public sealed class KsqlConsumerService : IHostedService
+    public sealed class KsqlConsumerService<T> : IHostedService
     {
-        private readonly KafkaKsqlConsumer<Vehicle> _ksqlConsumer;
+        private readonly KafkaKsqlConsumer<T> _ksqlConsumer;
 
-        public KsqlConsumerService(KafkaKsqlConsumer<Vehicle> ksqlConsumer)
+        public KsqlConsumerService(KafkaKsqlConsumer<T> ksqlConsumer)
         {
             _ksqlConsumer = ksqlConsumer;
         }
@@ -21,7 +20,7 @@ namespace DemoAndDiscourse.KsqlConsumer
         {
             _ksqlConsumer.Start(cancellationToken);
 
-            await _ksqlConsumer.Subscription.ForEachAsync(Console.WriteLine, cancellationToken);
+            await _ksqlConsumer.Subscription.ForEachAsync(m => Console.WriteLine(m), cancellationToken);
         }
 
         public Task StopAsync(CancellationToken cancellationToken) => Task.CompletedTask;

@@ -9,7 +9,7 @@ using Google.Protobuf;
 
 namespace DemoAndDiscourse.Kafka
 {
-    public sealed class KafkaConsumer<TPayload> : IDisposable where TPayload : IMessage<TPayload>, new()
+    public sealed class KafkaConsumer<TPayload> : IDisposable where TPayload : IMessage<TPayload>
     {
         private readonly IConsumer<string, TPayload> _consumer;
         private readonly string _topicName;

@@ -1,8 +1,5 @@
 using System;
 using System.Linq;
-using System.Reactive.Linq;
-using DemoAndDiscourse.Utils;
-using Grpc.Core;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Routing;
@@ -14,15 +11,10 @@ namespace DemoAndDiscourse.Server
     {
         public static IWebHostBuilder ConfigureGrpcServer(this IWebHostBuilder builder, params Action<IEndpointRouteBuilder>[] endPoints) =>
             builder.ConfigureServices(services => services.AddGrpc())
-                .Configure(appBuilder => appBuilder.UseRouting().UseEndpoints(endpointBuilder => endPoints.ToList().ForEach(e => e(endpointBuilder))));
-
-        public static IObservable<T> AsObservable<T>(this IAsyncStreamReader<T> streamReader) where T : class =>
-            Observable.FromAsync(async _ =>
-                {
-                    var hasNext = streamReader != null && await streamReader.MoveNext();
-                    return hasNext ? streamReader.Current : null;
-                })
-                .Repeat()
-                .TakeWhile(data => data.IsNotNullOrDefault());
+                .Configure(appBuilder => appBuilder.UseRouting()
+                    .UseEndpoints(endpointBuilder => endPoints.ToList()
+                        .ForEach(e => e(endpointBuilder))
+                    )
+                );
     }
 }

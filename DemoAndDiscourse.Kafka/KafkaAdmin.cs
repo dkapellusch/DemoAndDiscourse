@@ -29,7 +29,7 @@ namespace DemoAndDiscourse.Kafka
                 new TopicSpecification
                 {
                     Name = topic,
-                    Configs = topicConfiguration.GetConfigs(),
+                    Configs = topicConfiguration.GetConfig(),
                     NumPartitions = 25,
                     ReplicationFactor = 2
                 }
@@ -40,7 +40,14 @@ namespace DemoAndDiscourse.Kafka
         }
 
         public async Task ChangePartitionCountAsync(string topic, int partitionCount) =>
-            await _innerClient.CreatePartitionsAsync(new[] {new PartitionsSpecification {Topic = topic, IncreaseTo = partitionCount}});
+            await _innerClient.CreatePartitionsAsync(new[]
+            {
+                new PartitionsSpecification
+                {
+                    Topic = topic,
+                    IncreaseTo = partitionCount
+                }
+            });
 
 
         public Metadata GetMetadata(TimeSpan? timeout = null) => _innerClient.GetMetadata(timeout ?? TimeSpan.FromMinutes(1));

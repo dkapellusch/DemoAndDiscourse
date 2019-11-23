@@ -5,12 +5,9 @@ using DemoAndDiscourse.Contracts;
 using DemoAndDiscourse.Kafka;
 using DemoAndDiscourse.Utils;
 using Microsoft.AspNetCore;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.Extensions.DependencyInjection;
-using LocationService = DemoAndDiscourse.Server.Services.LocationService;
-using VehicleService = DemoAndDiscourse.Server.Services.VehicleService;
 
 namespace DemoAndDiscourse.Server
 {
@@ -21,8 +18,8 @@ namespace DemoAndDiscourse.Server
         private static IWebHostBuilder CreateHostBuilder(string[] args) => WebHost.CreateDefaultBuilder(args)
             .ConfigureKestrel(options => options.ListenLocalhost(5000, o => o.Protocols = HttpProtocols.Http2))
             .ConfigureGrpcServer(
-                _ => _.MapGrpcService<VehicleService>(),
-                _ => _.MapGrpcService<LocationService>()
+//                _ => _.MapGrpcService<VehicleService>(),
+//                _ => _.MapGrpcService<LocationService>()
             )
             .ConfigureServices((hostContext, services) => services
                 .AddKafkaConsumer<Vehicle>(new ConsumerConfig

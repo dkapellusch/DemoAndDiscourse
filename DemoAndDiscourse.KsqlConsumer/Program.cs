@@ -22,7 +22,7 @@ namespace DemoAndDiscourse.KsqlConsumer
                             Ksql = "SELECT * FROM VEHICLES LIMIT 1;",
                             StreamProperties = {{"auto.offset.reset", "earliest"}}
                         })
-                        .AddHostedService<KsqlConsumerService>()
+                        .AddHostedService<KsqlConsumerService<Vehicle>>()
                 );
     }
 }

@@ -16,7 +16,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\DemoAndDiscourse.Contracts\DemoAndDiscourse.Contracts.csproj" />
       <ProjectReference Include="..\DemoAndDiscourse.Kafka\DemoAndDiscourse.Kafka.csproj" />
+      <ProjectReference Include="..\DemoAndDiscourse.Logic\DemoAndDiscourse.Logic.csproj" />
     </ItemGroup>
 </Project>

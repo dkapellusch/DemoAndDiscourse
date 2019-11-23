@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Confluent.Kafka;
 using DemoAndDiscourse.Contracts;
 using DemoAndDiscourse.Kafka;
+using DemoAndDiscourse.Utils;
 using Microsoft.Extensions.Hosting;
 
 namespace DemoAndDiscourse.Producer
@@ -24,8 +25,7 @@ namespace DemoAndDiscourse.Producer
                 var randomVehicle = new Vehicle
                 {
                     Vin = RandomUtils.RandomVin,
-                    Year = RandomUtils.RandomInt(1920, 2020),
-                    CurrentLocationId = RandomUtils.RandomInt(1, 120)
+                    LocationCode = "PHX-IC"
                 };
                 await _producer.ProduceAsync(randomVehicle, null);
                 Console.WriteLine(randomVehicle.ToString());

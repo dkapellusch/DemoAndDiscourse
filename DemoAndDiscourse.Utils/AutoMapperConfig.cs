@@ -24,12 +24,12 @@ namespace DemoAndDiscourse.Utils
                         .ForMember(v => v.Vin, opts => opts.MapFrom(s => s[0]))
                         .ForMember(v => v.Make, opts => opts.MapFrom(s => s[1]))
                         .ForMember(v => v.Model, opts => opts.MapFrom(s => s[2]))
-                        .ForMember(v => v.Year, opts => opts.MapFrom(s => s[3]))
-                        .ForMember(v => v.CurrentLocationId, opts => opts.MapFrom(s => s[4]));
+                        .ForMember(v => v.LocationCode, opts => opts.MapFrom(s => s[3]));
 
                     c.CreateMap<string[], Location>()
                         .ForMember(l => l.LocationId, opts => opts.MapFrom(s => s[0]))
-                        .ForMember(l => l.LocationName, opts => opts.MapFrom(s => s[1]));
+                        .ForMember(l => l.LocationName, opts => opts.MapFrom(s => s[1]))
+                        .ForMember(l => l.LocationCode, opts => opts.MapFrom(s => s[2]));
                 }
             ).CreateMapper();
     }

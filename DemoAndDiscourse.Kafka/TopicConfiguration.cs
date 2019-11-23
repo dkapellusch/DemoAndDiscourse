@@ -53,7 +53,7 @@ namespace DemoAndDiscourse.Kafka
 
         public bool MessageDownConversionEnable { get; set; } = true;
 
-        public Dictionary<string, string> GetConfigs() => new Dictionary<string, string>
+        public Dictionary<string, string> GetConfig() => new Dictionary<string, string>
         {
             {"cleanup.policy", CleanUpPolicy},
             {"compression.type", CompressionType},
