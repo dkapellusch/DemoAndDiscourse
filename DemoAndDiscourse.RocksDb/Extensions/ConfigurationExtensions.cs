@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using DemoAndDiscourse.RocksDb.RocksAbstractions;
 using DemoAndDiscourse.RocksDb.Serialization;
 using Microsoft.Extensions.DependencyInjection;
@@ -11,6 +12,7 @@ namespace DemoAndDiscourse.RocksDb.Extensions
                 .AddSingleton<RocksStore>()
                 .AddSingleton(typeof(RocksLog<>))
                 .AddSingleton(typeof(RocksDictionary<,>))
+                .AddSingleton(typeof(IDictionary<,>), typeof(RocksDictionary<,>))
                 .AddSingleton<ISerializer, JsonSerializer>()
                 .AddSingleton(typeof(ISerializer<>), typeof(JsonSerializer<>));
     }

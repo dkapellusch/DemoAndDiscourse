@@ -21,9 +21,9 @@ namespace DemoAndDiscourse.GraphqlGateway.Graphql.Vehicle
         public VehicleInputType()
         {
             Field(v => v.Vin);
-            Field(v => v.Make);
-            Field(v => v.Model);
-            Field(v => v.LocationCode);
+            Field(v => v.Make, nullable: true);
+            Field(v => v.Model, nullable: true);
+            Field(v => v.LocationCode, nullable: true);
         }
     }
 }

@@ -16,7 +16,8 @@ namespace DemoAndDiscourse.Logic.Services.Vehicle
 
         public override Task<Contracts.Vehicle> GetVehicle(VehicleRequest request, ServerCallContext context)
         {
-            var result = _db.GetItem(request.Vin) ?? throw new RpcException(new Status(StatusCode.NotFound, "No vehicle found."));
+//            var result = _db.GetItem(request.Vin) ?? throw new RpcException(new Status(StatusCode.NotFound, "No vehicle found."));
+            var result = _db.GetItem(request.Vin);
             return Task.FromResult(result);
         }
 

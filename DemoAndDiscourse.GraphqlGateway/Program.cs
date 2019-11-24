@@ -27,23 +27,17 @@ namespace DemoAndDiscourse.GraphqlGateway
             .AddEnvironmentVariables()
             .Build();
 
-        static Task Main(string[] args)
-        {
-            var host = CreateWebHostBuilder(args).Build();
-            var store = host.Services.GetService<RocksStore>();
-            store.ChangedDataCaptureStream().Subscribe(c => { Console.WriteLine(c); });
-            return host.RunAsync();
-        }
+        static Task Main(string[] args) => CreateWebHostBuilder(args).Build().RunAsync();
 
         private static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
                 .UseConfiguration(Configuration)
                 .ConfigureServices(services => services
-                    .AddRouting()
                     .AddRocksDb("./Graph.db")
                     .AddKafka("localhost:39092")
                     .AddSingleton(typeof(KafkaBackedDb<>))
                     .AddServices()
+                    .AddValidators()
                     .AddResolvers()
                     .AddGraphqlTypes()
                     .AddHttpContextAccessor()

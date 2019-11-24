@@ -14,7 +14,7 @@ namespace DemoAndDiscourse.Logic.Services.Location
         }
 
         public override Task<Contracts.Location> GetLocation(LocationRequest request, ServerCallContext context) =>
-            Task.FromResult(_db.GetItem(request.LocationCode) ?? throw new RpcException(new Status(StatusCode.NotFound, "No location found.")));
+            Task.FromResult(_db.GetItem(request.LocationCode));
 
         public override Task<Locations> GetAllLocations(Empty request, ServerCallContext context) => Task.FromResult(new Locations {Elements = {_db.GetAll()}});
     }

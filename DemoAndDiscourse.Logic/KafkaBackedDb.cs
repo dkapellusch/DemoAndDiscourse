@@ -10,22 +10,30 @@ namespace DemoAndDiscourse.Logic
 {
     public class KafkaBackedDb<TValue> where TValue : IMessage<TValue>
     {
-        private readonly RocksDictionary<string, TValue> _dictionary;
+        private readonly IDictionary<string, TValue> _dictionary;
         private readonly KafkaConsumer<TValue> _ksqlConsumer;
 
-        public KafkaBackedDb(RocksDictionary<string, TValue> dictionary, KafkaConsumer<TValue> ksqlConsumer)
+        public KafkaBackedDb(IDictionary<string, TValue> dictionary, KafkaConsumer<TValue> ksqlConsumer)
         {
             _dictionary = dictionary;
             _ksqlConsumer = ksqlConsumer;
 
-            _ksqlConsumer.Start();
-            _ksqlConsumer.Subscription.ObserveOn(TaskPoolScheduler.Default).SubscribeOn(TaskPoolScheduler.Default).Subscribe(m => _dictionary[m.Key] = m.Value);
+            ksqlConsumer.Start();
+            ksqlConsumer.Subscription
+                .ObserveOn(TaskPoolScheduler.Default)
+                .SubscribeOn(TaskPoolScheduler.Default)
+                .Subscribe(m =>
+                {
+                    _dictionary[m.Key] = m.Value;
+                    ksqlConsumer.Commit(m.Partition, m.Offset);
+                });
         }
 
         public TValue GetItem(string key) => _dictionary[key];
 
         public IEnumerable<TValue> GetAll() => _dictionary.Values;
 
-        public IObservable<TValue> GetChanges() => _dictionary.DataChanges.Select(d => d.Data.value);
+//        public IObservable<TValue> GetChanges() => _dictionary.DataChanges.Select(d => d.Data.value);
+        public IObservable<TValue> GetChanges() => _ksqlConsumer.Subscription.Select(m => m.Value);
     }
 }

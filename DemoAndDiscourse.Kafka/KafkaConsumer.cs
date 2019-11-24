@@ -39,6 +39,8 @@ namespace DemoAndDiscourse.Kafka
                 Observable.Start(ReadOne)
                     .Expand(lv => Observable.Start(ReadOne))
                     .Where(m => m.IsNotNullOrDefault())
+                    .Publish()
+                    .AutoConnect()
                     .TakeWhile(r => !token.IsCancellationRequested);
         }
 
