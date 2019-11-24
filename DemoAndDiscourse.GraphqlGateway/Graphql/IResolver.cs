@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 
-namespace DemoAndDiscourse.GraphqlGateway
+namespace DemoAndDiscourse.GraphqlGateway.Graphql
 {
     public interface IResolver<TSource, TDestination>
     {

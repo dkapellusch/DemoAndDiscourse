@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using Confluent.Kafka;
 using DemoAndDiscourse.Contracts;
+using DemoAndDiscourse.GraphqlGateway.Graphql;
 using DemoAndDiscourse.GraphqlGateway.Graphql.Location;
 using DemoAndDiscourse.GraphqlGateway.Graphql.Vehicle;
 using DemoAndDiscourse.Kafka;
@@ -25,45 +26,6 @@ namespace DemoAndDiscourse.GraphqlGateway
 {
     public static class Extensions
     {
-        public static async Task<T> TryHandleRequest<T>(this ResolveFieldContext<T> context, Func<ResolveFieldContext<T>, Task<T>> resolver)
-        {
-            try
-            {
-                return await resolver(context);
-            }
-            catch (Exception exception)
-            {
-                throw new ExecutionError(exception.Message);
-            }
-        }
-
-        public static T UpdateObject<T>(this T destination, T source)
-        {
-            foreach (var property in typeof(T).GetProperties().Where(p => p.CanWrite))
-            {
-                var sourceValue = property.GetValue(source, null);
-                var destinationValue = property.GetValue(destination, null);
-
-                if (sourceValue is null || destinationValue != null && !string.IsNullOrEmpty(destinationValue.ToString())) continue;
-
-                property.SetValue(destination, sourceValue, null);
-            }
-
-            return destination;
-        }
-
-        public static T UpdateObject<T>(this T current, IDictionary<string, object> updates)
-        {
-            var lowerCaseKeys = updates.Keys.Select(k => k.ToLowerInvariant()).ToHashSet();
-            foreach (var property in typeof(T).GetProperties().Where(p => p.CanWrite && lowerCaseKeys.Contains(p.Name.ToLowerInvariant())))
-            {
-                var currentValue = property.GetValue(current, null);
-                property.SetValue(updates[property.Name.ToLowerInvariant()], currentValue, null);
-            }
-
-            return current;
-        }
-
         public static IServiceCollection AddGraphqlTypes(this IServiceCollection services)
         {
             var currentAssembly = Assembly.GetEntryAssembly();

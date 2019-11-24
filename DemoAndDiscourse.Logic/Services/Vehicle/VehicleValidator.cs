@@ -9,8 +9,6 @@ namespace DemoAndDiscourse.Logic.Services.Vehicle
         public VehicleValidator(LocationReadService locationReadService)
         {
             RuleFor(v => v.Vin).NotNull().NotEmpty().Length(17);
-            RuleFor(v => v.Make).NotNull().NotEmpty();
-            RuleFor(v => v.Model).NotNull().NotEmpty();
             RuleFor(v => v.LocationCode)
                 .MustAsync(async
                     (v, l, token) => string.IsNullOrEmpty(l) || await locationReadService.GetLocation(new LocationRequest {LocationCode = l}, new InMemoryGrpcServerCallContext()) != null)

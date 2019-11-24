@@ -77,7 +77,7 @@ namespace DemoAndDiscourse.RocksDb.RocksAbstractions
         {
             value = this[key];
 
-            return value is null;
+            return !(value is null);
         }
 
         public TValue this[TKey key]

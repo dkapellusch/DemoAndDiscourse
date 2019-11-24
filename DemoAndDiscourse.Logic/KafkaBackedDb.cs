@@ -22,7 +22,12 @@ namespace DemoAndDiscourse.Logic
                 .SubscribeOn(TaskPoolScheduler.Default)
                 .Subscribe(m =>
                 {
-                    _dictionary[m.Key] = m.Value;
+                    var value = m.Value;
+
+                    if (_dictionary.TryGetValue(m.Key, out var currentElement))
+                        value = value.UpdateObject(currentElement);
+
+                    _dictionary[m.Key] = value;
                     ksqlConsumer.Commit(m.Partition, m.Offset);
                 });
         }

@@ -15,12 +15,6 @@ namespace DemoAndDiscourse.GraphqlGateway.Graphql.Vehicle
                 async ctx => await ctx.TryAsyncResolve(async context =>
                 {
                     var inputVehicle = ctx.GetArgument<Contracts.Vehicle>("vehicle");
-
-                    var currentVehicle = await readService.GetVehicle(new VehicleRequest {Vin = inputVehicle.Vin}, new InMemoryGrpcServerCallContext());
-
-                    if (currentVehicle != null)
-                        inputVehicle = inputVehicle.UpdateObject(currentVehicle);
-
                     return await vehicleService.AddVehicle(inputVehicle, new InMemoryGrpcServerCallContext());
                 })
             );
