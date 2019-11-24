@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
 using System.Threading.Tasks;
 using DemoAndDiscourse.GraphqlGateway.Graphql;
 using DemoAndDiscourse.Logic;
 using DemoAndDiscourse.RocksDb.Extensions;
-using DemoAndDiscourse.RocksDb.RocksAbstractions;
 using GraphQL.Server;
 using GraphQL.Server.Ui.GraphiQL;
 using GraphQL.Server.Ui.Playground;
@@ -13,7 +10,6 @@ using GraphQL.Server.Ui.Voyager;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.WebSockets;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 

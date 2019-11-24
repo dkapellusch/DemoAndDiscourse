@@ -10,13 +10,11 @@ namespace DemoAndDiscourse.Logic
 {
     public class KafkaBackedDb<TValue> where TValue : IMessage<TValue>
     {
-        private readonly IDictionary<string, TValue> _dictionary;
-        private readonly KafkaConsumer<TValue> _ksqlConsumer;
+        private readonly RocksDictionary<string, TValue> _dictionary;
 
-        public KafkaBackedDb(IDictionary<string, TValue> dictionary, KafkaConsumer<TValue> ksqlConsumer)
+        public KafkaBackedDb(RocksDictionary<string, TValue> dictionary, KafkaConsumer<TValue> ksqlConsumer)
         {
             _dictionary = dictionary;
-            _ksqlConsumer = ksqlConsumer;
 
             ksqlConsumer.Start();
             ksqlConsumer.Subscription
@@ -34,6 +32,6 @@ namespace DemoAndDiscourse.Logic
         public IEnumerable<TValue> GetAll() => _dictionary.Values;
 
 //        public IObservable<TValue> GetChanges() => _dictionary.DataChanges.Select(d => d.Data.value);
-        public IObservable<TValue> GetChanges() => _ksqlConsumer.Subscription.Select(m => m.Value);
+        public IObservable<TValue> GetChanges() => _dictionary.DataChanges.Select(dc => dc.Data.value);
     }
 }

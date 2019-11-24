@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -49,6 +50,18 @@ namespace DemoAndDiscourse.GraphqlGateway
             }
 
             return destination;
+        }
+
+        public static T UpdateObject<T>(this T current, IDictionary<string, object> updates)
+        {
+            var lowerCaseKeys = updates.Keys.Select(k => k.ToLowerInvariant()).ToHashSet();
+            foreach (var property in typeof(T).GetProperties().Where(p => p.CanWrite && lowerCaseKeys.Contains(p.Name.ToLowerInvariant())))
+            {
+                var currentValue = property.GetValue(current, null);
+                property.SetValue(updates[property.Name.ToLowerInvariant()], currentValue, null);
+            }
+
+            return current;
         }
 
         public static IServiceCollection AddGraphqlTypes(this IServiceCollection services)
