@@ -11,7 +11,7 @@ namespace DemoAndDiscourse.GraphqlGateway.Graphql
     {
         public MutationResultType()
         {
-            Field<IdGraphType>(nameof(MutationResult.Id), description: "The Id of the object effected by the mutation.");
+            Field<IdGraphType>(nameof(MutationResult.Id), "The Id of the object effected by the mutation.");
         }
     }
 }

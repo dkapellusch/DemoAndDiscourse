@@ -59,23 +59,16 @@ namespace DemoAndDiscourse.RocksDb.Extensions
             }
         }
 
-        public static ReadOptions SetPrefix(this ReadOptions options, SliceTransform sliceTransform)
-        {
-            Native.Instance.rocksdb_readoptions_set_prefix_same_as_start(options.Handle, true);
-
-            return options;
-        }
-
-        public static IEnumerable<(string key, byte[] value)> GetEnumerable(this Iterator iterator, Func<string, bool> condition)
+        public static IEnumerable<(byte[] key, byte[] value)> GetEnumerable(this Iterator iterator, Func<byte[], byte[], bool> condition)
         {
             using var rocksIterator = iterator;
 
             while (rocksIterator.Valid())
             {
-                var key = rocksIterator.StringKey();
+                var key = rocksIterator.Key();
                 var value = rocksIterator.Value();
 
-                if (condition(key))
+                if (condition(key, value))
                     yield return (key, value);
                 else
                     yield break;

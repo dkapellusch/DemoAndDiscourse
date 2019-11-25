@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using DemoAndDiscourse.RocksDb.Extensions;
 using DemoAndDiscourse.RocksDb.Serialization;
@@ -50,12 +49,24 @@ namespace DemoAndDiscourse.RocksDb.RocksAbstractions
             _subject.OnNext(deletedEvent);
         }
 
-        public IEnumerable<(TKey key, TValue value)> GetItems<TKey, TValue>(TKey key)
+        public IEnumerable<(TKey key, TValue value)> GetItems<TKey, TValue>(TKey key, Func<TKey, TValue, bool> condition)
         {
+            var startingKey = _serializer.Serialize(key);
             var iteratorOptions = new ReadOptions();
 
             return RocksDb.NewIterator(GetColumnFamily<TValue>(), iteratorOptions)
-                .Seek(_serializer.Serialize(key))
+                .Seek(startingKey)
+                .GetEnumerable((serializedKey, serializedValue) => condition(_serializer.Deserialize<TKey>(serializedKey), _serializer.Deserialize<TValue>(serializedValue)))
+                .Select(kv => (_serializer.Deserialize<TKey>(kv.key), _serializer.Deserialize<TValue>(kv.value)));
+        }
+
+        public IEnumerable<(TKey key, TValue value)> GetItems<TKey, TValue>(TKey key)
+        {
+            var startingKey = _serializer.Serialize(key);
+            var iteratorOptions = new ReadOptions();
+
+            return RocksDb.NewIterator(GetColumnFamily<TValue>(), iteratorOptions)
+                .Seek(startingKey)
                 .GetEnumerable()
                 .Select(kv => (_serializer.Deserialize<TKey>(kv.key), _serializer.Deserialize<TValue>(kv.value)));
         }

@@ -2,7 +2,6 @@ syntax = "proto3";
 option csharp_namespace = "DemoAndDiscourse.Contracts";
 package DD;
 
-import "google/protobuf/timestamp.proto";
 import "Empty.proto";
 
 message Vehicle {
@@ -26,6 +25,9 @@ service VehicleRead {
     rpc GetVehicle (VehicleRequest) returns (Vehicle) {
     }
 
+    rpc GetVehiclesByPartialVin (VehicleRequest) returns (Vehicles) {
+    }
+    
     rpc GetAllVehicles (Empty) returns (Vehicles) {
     }
 

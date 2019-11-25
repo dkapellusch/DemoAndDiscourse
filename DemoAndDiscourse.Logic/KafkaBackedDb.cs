@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using DemoAndDiscourse.Kafka;
@@ -10,11 +11,11 @@ namespace DemoAndDiscourse.Logic
 {
     public class KafkaBackedDb<TValue> where TValue : IMessage<TValue>
     {
-        private readonly RocksDictionary<string, TValue> _dictionary;
+        private readonly RocksStore _rocksStore;
 
-        public KafkaBackedDb(RocksDictionary<string, TValue> dictionary, KafkaConsumer<TValue> kafkaConsumer)
+        public KafkaBackedDb(RocksStore rocksStore, KafkaConsumer<TValue> kafkaConsumer)
         {
-            _dictionary = dictionary;
+            _rocksStore = rocksStore;
 
             kafkaConsumer.Start();
             kafkaConsumer.Subscription
@@ -23,19 +24,22 @@ namespace DemoAndDiscourse.Logic
                 .Subscribe(m =>
                 {
                     var value = m.Value;
+                    var currentValue = _rocksStore.Get<string, TValue>(m.Key);
 
-                    if (_dictionary.TryGetValue(m.Key, out var currentElement))
-                        value = value.UpdateObject(currentElement);
+                    if (!(currentValue is null))
+                        value.UpdateObject(currentValue);
 
-                    _dictionary[m.Key] = value;
+                    _rocksStore.Add(m.Key, value);
                     kafkaConsumer.Commit(m.Partition, m.Offset);
                 });
         }
 
-        public TValue GetItem(string key) => _dictionary[key];
+        public TValue GetItem(string key) => _rocksStore.Get<string, TValue>(key);
 
-        public IEnumerable<TValue> GetAll() => _dictionary.Values;
+        public IEnumerable<TValue> GetAll() => _rocksStore.GetItems<string, TValue>().Select(pair => pair.value);
 
-        public IObservable<TValue> GetChanges() => _dictionary.DataChanges.Select(dc => dc.Data.value);
+        public IEnumerable<TValue> GetItems(string key) => _rocksStore.GetItems<string, TValue>(key, (k, _) => k.Contains(key)).Select(kv => kv.value);
+
+        public IObservable<TValue> GetChanges() => _rocksStore.ChangedDataCaptureStream().OfType<DataChangedEvent<string, TValue>>().Select(dc => dc.Data.value);
     }
 }

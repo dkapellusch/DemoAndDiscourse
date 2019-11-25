@@ -34,8 +34,8 @@ namespace DemoAndDiscourse.Logic
                 {
                     BootstrapServers = url,
                     AutoOffsetReset = AutoOffsetReset.Latest,
-                    ClientId = Guid.NewGuid().ToString(),
-                    GroupId = "Gateway",
+                    ClientId = "GatewayVehicleConsumer",
+                    GroupId = "Gateway2",
                     EnableAutoCommit = false
                 })
                 .AddKafkaProducer<string, Location>(new ProducerConfig
@@ -47,8 +47,8 @@ namespace DemoAndDiscourse.Logic
                 {
                     BootstrapServers = url,
                     AutoOffsetReset = AutoOffsetReset.Latest,
-                    ClientId = Guid.NewGuid().ToString(),
-                    GroupId = "Gateway",
+                    ClientId = "GatewayLocationConsumer",
+                    GroupId = "Gateway2",
                     EnableAutoCommit = false
                 })
                 .AddSingleton(typeof(IMessageSerializer<>), typeof(JsonMessageSerializer<>));

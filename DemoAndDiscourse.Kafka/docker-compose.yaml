@@ -61,6 +61,7 @@ networks:
   #  CREATE STREAM vehicles (vin string, make string, model string,  year int, currentLocationId int) WITH (KAFKA_TOPIC='Vehicles', VALUE_FORMAT='JSON');
   #  CREATE STREAM vStream (vin string, make string, model string,  locationCode string) WITH (KAFKA_TOPIC='Vehicles', VALUE_FORMAT='JSON');
   #  CREATE table vTab (vin string, make string, model string,  locationCode string) WITH (KAFKA_TOPIC='Vehicles', VALUE_FORMAT='JSON', key='vin');
+  #  CREATE table locationTable (locationCode string, locationName string) WITH (KAFKA_TOPIC='Vehicles', VALUE_FORMAT='JSON', key='locationCode');
   #  CREATE table v (vin string, make string, model string,  locationCode string) WITH (KAFKA_TOPIC='Vehicles', VALUE_FORMAT='JSON', key='vin');
   #  CREATE Table vehicles (vin string, make string, model string,  locationCode string) WITH (KAFKA_TOPIC='Vehicles', VALUE_FORMAT='JSON', key='vin');
   #  CREATE STREAM locations (locationId int, LocationName string) WITH (KAFKA_TOPIC='Locations', VALUE_FORMAT='JSON');
@@ -76,3 +77,5 @@ networks:
 #  WINDOW TUMBLING (SIZE 1 MINUTE)
 #  GROUP BY regioni
 #  CREATE TABLE vtab as SELECT vin, make, model, locationCode FROM vehicles;
+#  CREATE STREAM vehicles (vin string, make string, model string, locationCode string) WITH (KAFKA_TOPIC='Vehicles', VALUE_FORMAT='JSON');
+#  CREATE STREAM vehicles_at_location AS SELECT vin , make , model , v.locationCode, l.LocationName FROM vehicles v LEFT JOIN locations l WITHIN 1 HOURS  ON v.locationCode = l.locationCode ;
