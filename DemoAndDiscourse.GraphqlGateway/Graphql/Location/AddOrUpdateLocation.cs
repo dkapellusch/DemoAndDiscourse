@@ -4,19 +4,19 @@ using GraphQL.Types;
 
 namespace DemoAndDiscourse.GraphqlGateway.Graphql.Location
 {
-    public class LocationMutation : ObjectGraphType
+    public class AddOrUpdateLocation : ObjectGraphType
     {
-        public LocationMutation(LocationWriteService locationService)
+        public AddOrUpdateLocation(LocationWriteService locationService)
         {
-            FieldAsync<LocationType>(GetType().Name,
+            FieldAsync<MutationResultType>(GetType().Name,
                 "Add or update a location",
                 new QueryArguments(new QueryArgument<NonNullGraphType<LocationInputType>> {Name = "location"}),
                 async ctx =>
                 {
                     var inputLocation = ctx.GetArgument<Contracts.Location>("location");
-                    var addedLocation = await locationService.AddLocation(inputLocation, new InMemoryGrpcServerCallContext());
+                    var changedLocation = await locationService.AddLocation(inputLocation, new InMemoryGrpcServerCallContext());
 
-                    return addedLocation;
+                    return new MutationResult {Id = changedLocation.LocationCode};
                 });
         }
     }

@@ -6,13 +6,13 @@ namespace DemoAndDiscourse.GraphqlGateway.Graphql.Location
     {
         public LocationType(IResolver<Contracts.Location, Contracts.Vehicle[]> vehicleResolver)
         {
-            Field(l => l.LocationId);
-            Field(l => l.LocationCode);
+            Field<IdGraphType>(nameof(Contracts.Location.LocationCode));
             Field(l => l.LocationName);
-            Field(typeof(ListGraphType<Vehicle.VehicleType>),
+            Field<ListGraphType<Vehicle.VehicleType>>(
                 "vehicles",
                 "a location",
-                resolve: ctx => vehicleResolver.Resolve(ctx.Source));
+                resolve: ctx => vehicleResolver.Resolve(ctx.Source)
+            );
         }
     }
 
@@ -20,9 +20,8 @@ namespace DemoAndDiscourse.GraphqlGateway.Graphql.Location
     {
         public LocationInputType()
         {
-            Field(l => l.LocationId);
-            Field(l => l.LocationCode);
-            Field(l => l.LocationName);
+            Field<IdGraphType>(nameof(Contracts.Location.LocationCode));
+            Field(l => l.LocationName, nullable: true);
         }
     }
 }

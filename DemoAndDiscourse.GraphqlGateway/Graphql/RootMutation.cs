@@ -12,8 +12,8 @@ namespace DemoAndDiscourse.GraphqlGateway.Graphql
         public RootMutation(IDependencyResolver resolver)
         {
             _resolver = resolver;
-            AddMutations<VehicleMutation>();
-            AddMutations<LocationMutation>();
+            AddMutations<AddOrUpdateVehicle>();
+            AddMutations<AddOrUpdateLocation>();
         }
 
         private void AddMutations<T>() where T : IComplexGraphType

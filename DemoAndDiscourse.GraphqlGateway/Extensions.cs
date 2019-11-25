@@ -1,8 +1,6 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
 using Confluent.Kafka;
 using DemoAndDiscourse.Contracts;
 using DemoAndDiscourse.GraphqlGateway.Graphql;
@@ -35,7 +33,8 @@ namespace DemoAndDiscourse.GraphqlGateway
                 services.AddSingleton(type.UnderlyingSystemType);
             }
 
-            return services.AddSingleton<IDependencyResolver, DependencyResolver>()
+            return services
+                .AddSingleton<IDependencyResolver, DependencyResolver>()
                 .AddSingleton<IDocumentExecuter, DocumentExecuter>()
                 .AddSingleton<IDocumentWriter, DocumentWriter>()
                 .AddSingleton<ISchema, Schema>()

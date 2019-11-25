@@ -6,7 +6,7 @@ namespace DemoAndDiscourse.GraphqlGateway.Graphql.Vehicle
     {
         public VehicleType(IResolver<Contracts.Vehicle, Contracts.Location> locationResolver)
         {
-            Field(v => v.Vin);
+            Field<IdGraphType>(nameof(Contracts.Vehicle.Vin));
             Field(v => v.Make);
             Field(v => v.Model);
             Field<Location.LocationType>("location",
@@ -20,7 +20,7 @@ namespace DemoAndDiscourse.GraphqlGateway.Graphql.Vehicle
     {
         public VehicleInputType()
         {
-            Field(v => v.Vin);
+            Field<IdGraphType>(nameof(Contracts.Vehicle.Vin));
             Field(v => v.Make, nullable: true);
             Field(v => v.Model, nullable: true);
             Field(v => v.LocationCode, nullable: true);

@@ -8,10 +8,6 @@ namespace DemoAndDiscourse.RocksDb.RocksAbstractions
 
     public class DataChangedEvent<TKey, TValue>
     {
-        public DataChangedEvent()
-        {
-        }
-
         public DataChangedEvent(Operation operation, (TKey key, TValue value) data)
         {
             Operation = operation;

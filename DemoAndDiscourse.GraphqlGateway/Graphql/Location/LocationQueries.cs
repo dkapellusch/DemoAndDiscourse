@@ -12,7 +12,8 @@ namespace DemoAndDiscourse.GraphqlGateway.Graphql.Location
             FieldAsync<LocationType>("location",
                 "a location",
                 new QueryArguments(new QueryArgument(typeof(StringGraphType)) {Name = "code"}),
-                async ctx => await locationService.GetLocation(new LocationRequest {LocationCode = ctx.Arguments["code"].ToString()}, new InMemoryGrpcServerCallContext()));
+                async ctx =>
+                    await locationService.GetLocation(new LocationRequest {LocationCode = ctx.Arguments["code"].ToString()}, new InMemoryGrpcServerCallContext()));
 
             FieldAsync<ListGraphType<LocationType>>("locations",
                 "all locations",
@@ -20,7 +21,6 @@ namespace DemoAndDiscourse.GraphqlGateway.Graphql.Location
                 async ctx =>
                 {
                     var response = await locationService.GetAllLocations(new Empty(), new InMemoryGrpcServerCallContext());
-
                     return response.Elements;
                 });
         }
