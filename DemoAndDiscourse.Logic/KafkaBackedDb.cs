@@ -12,12 +12,12 @@ namespace DemoAndDiscourse.Logic
     {
         private readonly RocksDictionary<string, TValue> _dictionary;
 
-        public KafkaBackedDb(RocksDictionary<string, TValue> dictionary, KafkaConsumer<TValue> ksqlConsumer)
+        public KafkaBackedDb(RocksDictionary<string, TValue> dictionary, KafkaConsumer<TValue> kafkaConsumer)
         {
             _dictionary = dictionary;
 
-            ksqlConsumer.Start();
-            ksqlConsumer.Subscription
+            kafkaConsumer.Start();
+            kafkaConsumer.Subscription
                 .ObserveOn(TaskPoolScheduler.Default)
                 .SubscribeOn(TaskPoolScheduler.Default)
                 .Subscribe(m =>
@@ -28,7 +28,7 @@ namespace DemoAndDiscourse.Logic
                         value = value.UpdateObject(currentElement);
 
                     _dictionary[m.Key] = value;
-                    ksqlConsumer.Commit(m.Partition, m.Offset);
+                    kafkaConsumer.Commit(m.Partition, m.Offset);
                 });
         }
 
@@ -36,7 +36,6 @@ namespace DemoAndDiscourse.Logic
 
         public IEnumerable<TValue> GetAll() => _dictionary.Values;
 
-//        public IObservable<TValue> GetChanges() => _dictionary.DataChanges.Select(d => d.Data.value);
         public IObservable<TValue> GetChanges() => _dictionary.DataChanges.Select(dc => dc.Data.value);
     }
 }

@@ -17,7 +17,8 @@ namespace DemoAndDiscourse.Logic
                 var sourceValue = property.GetValue(source, null);
                 var destinationValue = property.GetValue(destination, null);
 
-                if (sourceValue is null || destinationValue != null && !string.IsNullOrEmpty(destinationValue.ToString())) continue;
+                if (sourceValue is null || destinationValue != null && !string.IsNullOrEmpty(destinationValue.ToString()))
+                    continue;
 
                 property.SetValue(destination, sourceValue, null);
             }

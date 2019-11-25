@@ -72,10 +72,10 @@ namespace DemoAndDiscourse.RocksDb.RocksAbstractions
 
         public Iterator GetIterator<TValue>() => RocksDb.NewIterator(GetColumnFamily<TValue>(), new ReadOptions());
 
-        public IObservable<object> ChangedDataCaptureStream() => _stream ??= _subject.Publish().AutoConnect();
+        public IObservable<object> ChangedDataCaptureStream() => _stream ??= _subject;
 
-        private void WriteToAuditLog<TKey, TValue>(DataChangedEvent<TKey, TValue> dataChangedEvent)
-            => RocksDb.Put(DateTime.UtcNow.ToString(CultureInfo.InvariantCulture), _serializer.Serialize(dataChangedEvent), GetAuditColumnFamily<TValue>());
+        private void WriteToAuditLog<TKey, TValue>(DataChangedEvent<TKey, TValue> dataChangedEvent) =>
+            RocksDb.Put(DateTime.UtcNow.ToString(CultureInfo.InvariantCulture), _serializer.Serialize(dataChangedEvent), GetAuditColumnFamily<TValue>());
 
         private ColumnFamilyHandle GetColumnFamily<T>() => _db.GetOrCreateColumnFamily(typeof(T).Name);
 
